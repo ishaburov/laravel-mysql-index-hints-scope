@@ -117,6 +117,28 @@ ExampleModel::select('*')
             ->forceIndex('example_index', IndexHintsConstants::ORDER_BY)
 ```
 
+Index hints give the optimizer information about how to choose indexes during query processing. Index hints, described here, differ from optimizer hints, described in Section 8.9.3, “Optimizer Hints”. Index and optimizer hints may be used separately or together.
+
+Index hints apply only to SELECT and UPDATE statements.
+
+Index hints are specified following a table name. (For the general syntax for specifying tables in a SELECT statement, see Section 13.2.9.2, “JOIN Clause”.) The syntax for referring to an individual table, including index hints, looks like this:
+
+```
+tbl_name [[AS] alias] [index_hint_list]
+
+index_hint_list:
+    index_hint [index_hint] ...
+
+index_hint:
+    USE {INDEX|KEY}
+      [FOR {JOIN|ORDER BY|GROUP BY}] ([index_list])
+  | {IGNORE|FORCE} {INDEX|KEY}
+      [FOR {JOIN|ORDER BY|GROUP BY}] (index_list)
+
+index_list:
+    index_name [, index_name] ...
+
+```
 
 #### Offical MySQL documentation 
 Index Hints https://dev.mysql.com/doc/refman/5.7/en/index-hints.html
