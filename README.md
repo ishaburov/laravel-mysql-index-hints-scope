@@ -1,7 +1,18 @@
 # Laravel mysql index hints scope
+[![Latest Stable Version](https://poser.pugx.org/shaburov/laravel-mysql-index-hints-scope/v)](//packagist.org/packages/shaburov/laravel-mysql-index-hints-scope)
+[![Total Downloads](https://poser.pugx.org/shaburov/laravel-mysql-index-hints-scope/downloads)](//packagist.org/packages/shaburov/laravel-mysql-index-hints-scope)
+[![License](https://poser.pugx.org/shaburov/laravel-mysql-index-hints-scope/license)](//packagist.org/packages/shaburov/laravel-mysql-index-hints-scope)
 
-### Simple library for mysql index hints and optimisations
 
+### Simple library for mysql index hints and optimisations (USE INDEX, FORCE INDEX, IGNORE INDEX)
+
+### requires
+* php: ^7.4|^8.0
+* doctrine/dbal: ^3.0
+* illuminate/database: ^8.0|^9.0
+* illuminate/support: ^8.0|^9.0
+### Installation
+    composer require shaburov/laravel-mysql-index-hints-scope
 ## How it's use
 #### Extended class Blueprint
 
