@@ -1,0 +1,58 @@
+{
+    "name":"shaburov/laravel-mysql-index-hints-scope",
+    "description":"Index Hints for laravel https://dev.mysql.com/doc/refman/5.7/en/index-hints.html",
+    "keywords":[
+        "hints",
+        "laravel",
+        "laravel mysql",
+        "database hints",
+        "database",
+        "force index",
+        "use index",
+        "ignore index",
+        "indexes"
+    ],
+    "license":"MIT",
+    "authors":[
+        {
+            "name":"Ivan Shaburov",
+            "email":"nkfrez@gmail.com"
+        }
+    ],
+    "minimum-stability":"stable",
+    "require":{
+        "php":"^7.4|^8.0",
+        "illuminate/database": "^8.0|^9.0",
+        "illuminate/support": "^8.0|^9.0",
+        "doctrine/dbal" : "^3.0"
+    },
+    "autoload":{
+        "psr-4":{
+            "IndexHints\\":"src/"
+        }
+    },
+    "autoload-dev":{
+        "psr-4":{
+            "Tests\\":"tests/"
+        }
+    },
+    "scripts":{
+        "test":"phpunit"
+    },
+    "config":{
+        "process-timeout":0,
+        "sort-packages":true
+    },
+    "extra":{
+        "laravel":{
+            "providers":[
+                "IndexHints\\IndexHintsServiceProvider"
+            ]
+        }
+    },
+    "require-dev":{
+        "laravel/framework":"^8.0|^9.0",
+        "phpunit/phpunit":"^9.3",
+        "orchestra/testbench":"^6.24.1|^7.4"
+    }
+}
