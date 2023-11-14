@@ -1,0 +1,1 @@
+{"version":1,"defects":[],"times":{"Tests\\HintableTest::testForceIndexes":0.094,"Tests\\ServiceProviderTest::testDropIndexIfExists":0.006}}
