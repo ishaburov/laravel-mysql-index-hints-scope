@@ -7,10 +7,11 @@
 ### Simple library for mysql index hints and optimisations (USE INDEX, FORCE INDEX, IGNORE INDEX)
 
 ### requires
-* php: ^7.4|^8.0
+* php: ^7.4|^8.0|^8.1|^8.2|^8.3
 * doctrine/dbal: ^3.0
-* illuminate/database: ^8.0|^9.0
-* illuminate/support: ^8.0|^9.0
+* illuminate/database: ^8.0|^9.0|^10.0|^v11.0
+* illuminate/support: ^8.0|^9.0|^10.0|^v11.0
+
 ### Installation
     composer require shaburov/laravel-mysql-index-hints-scope
 ## How it's use
