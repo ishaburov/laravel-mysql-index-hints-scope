@@ -36,12 +36,7 @@ class IndexHintsServiceProvider extends ServiceProvider
         });
 
         Blueprint::macro('hasIndex', function (string $index): bool {
-            $conn = Schema::getConnection();
-            $dbSchemaManager = $conn->getDoctrineSchemaManager();
-
-            $doctrineTable = $dbSchemaManager->listTableDetails($this->getTable());
-
-            return $doctrineTable->hasIndex($index);
+            return Schema::hasIndex($this->getTable(), $index);
         });
     }
 }

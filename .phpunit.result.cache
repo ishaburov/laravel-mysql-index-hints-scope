@@ -1,1 +1,1 @@
-{"version":1,"defects":[],"times":{"Tests\\HintableTest::testForceIndexes":0.094,"Tests\\ServiceProviderTest::testDropIndexIfExists":0.006}}
+{"version":1,"defects":{"Tests\\ServiceProviderTest::testDropIndexIfExists":7},"times":{"Tests\\HintableTest::testForceIndexes":0.026,"Tests\\ServiceProviderTest::testDropIndexIfExists":0.001}}

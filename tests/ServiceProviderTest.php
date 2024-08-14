@@ -25,8 +25,7 @@ class ServiceProviderTest extends TestCase
         Schema::table('test_table', function (Blueprint $table) {
             $table->dropIndexIfExists('test_table_test_index');
         });
-
-        $this->assertEquals("drop index \"test_table_test_index\"", DB::getQueryLog()[3]['query']);
+        $this->assertEquals("drop index \"test_table_test_index\"", DB::getQueryLog()[4]['query']);
 
         Schema::table('test_table', function (Blueprint $table) {
             $table->dropIndexIfExists('test_table_test_index');
