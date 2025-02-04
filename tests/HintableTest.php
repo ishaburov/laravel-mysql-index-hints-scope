@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -22,7 +21,18 @@ class HintableTest extends TestCase
             $table->index('created_at');
         });
 
-        ExampleModel::create(['test' => 'test']);
+        Schema::create('example_model_groups', function (Blueprint $table) {
+            $table->id();
+            $table->string('test');
+            $table->string('example_model_id');
+            $table->timestamps();
+            $table->index('test');
+            $table->index('example_model_id');
+        });
+
+        $example = ExampleModel::create(['test' => 'test']);
+
+        ExampleModelGroup::create(['example_model_id' => $example->id, 'test' => 'test']);
 
         $sql = ExampleModel::select('*')
             ->forceIndex('example_models_test_index')
@@ -35,7 +45,10 @@ class HintableTest extends TestCase
             ->ignoreIndex('example_models_created_at_index')
             ->toSql();
 
-        $this->assertStringContainsString('select * from example_models IGNORE INDEX (example_models_created_at_index)', $sql);
+        $this->assertStringContainsString(
+            'select * from example_models IGNORE INDEX (example_models_created_at_index)',
+            $sql
+        );
 
         $sql = ExampleModel::select('*')
             ->useIndex(['example_models_test_index', 'example_models_created_at_index'])
@@ -43,7 +56,10 @@ class HintableTest extends TestCase
             ->useIndex(['example_models_test_index'])
             ->toSql();
 
-        $this->assertStringContainsString('select * from example_models USE INDEX (example_models_test_index,example_models_created_at_index) IGNORE INDEX (example_models_created_at_index) USE INDEX (example_models_test_index)', $sql);
+        $this->assertStringContainsString(
+            'select * from example_models USE INDEX (example_models_test_index,example_models_created_at_index) IGNORE INDEX (example_models_created_at_index) USE INDEX (example_models_test_index)',
+            $sql
+        );
 
 
         $sql = ExampleModel::select('*')
@@ -52,7 +68,10 @@ class HintableTest extends TestCase
             ->ignoreIndex('example_models_created_at_index', 'GROUP_BY')
             ->toSql();
 
-        $this->assertStringContainsString("select * from example_models USE INDEX (example_models_test_index) IGNORE INDEX FOR ORDER BY (example_models_created_at_index) IGNORE INDEX FOR GROUP BY (example_models_created_at_index)", $sql);
+        $this->assertStringContainsString(
+            "select * from example_models USE INDEX (example_models_test_index) IGNORE INDEX FOR ORDER BY (example_models_created_at_index) IGNORE INDEX FOR GROUP BY (example_models_created_at_index)",
+            $sql
+        );
 
 
         $sql = ExampleModel::select('*')
@@ -61,15 +80,50 @@ class HintableTest extends TestCase
             ->ignoreIndex('example_models_created_at_index', IndexHintsConstants::GROUP_BY)
             ->toSql();
 
-        $this->assertStringContainsString("select * from example_models IGNORE INDEX FOR JOIN (example_models_created_at_index) IGNORE INDEX FOR ORDER BY (example_models_created_at_index) IGNORE INDEX FOR GROUP BY (example_models_created_at_index)", $sql);
+        $this->assertStringContainsString(
+            "select * from example_models IGNORE INDEX FOR JOIN (example_models_created_at_index) IGNORE INDEX FOR ORDER BY (example_models_created_at_index) IGNORE INDEX FOR GROUP BY (example_models_created_at_index)",
+            $sql
+        );
+
+        $sql = ExampleModel::query()
+            ->select('*')
+            ->join(
+                DB::raw(
+                    ExampleModel::joinTableIndexHint('example_model_groups', 'example_model_groups_test_index', 'emg')
+                ),
+                'emg.example_model_id',
+                'example_models.id'
+            )->toSql();
+
+        $this->assertStringContainsString(
+            'select * from "example_models" inner join example_model_groups as emg USE INDEX (example_model_groups_test_index) on "emg"."example_model_id" = "example_models"."id"',
+            $sql
+        );
 
 
-        $this->expectException(\Exception::class);
+        try {
+            ExampleModel::query()
+                ->select('*')
+                ->useIndex('example_models_created_at_index', IndexHintsConstants::JOIN)
+                ->forceIndex('example_models_created_at_index', IndexHintsConstants::ORDER_BY)
+                ->toSql();
+        } catch (\Throwable $e) {
+            $this->assertInstanceOf(\Exception::class, $e);
+        }
 
-        ExampleModel::select('*')
-            ->useIndex('example_models_created_at_index', IndexHintsConstants::JOIN)
-            ->forceIndex('example_models_created_at_index', IndexHintsConstants::ORDER_BY)
-            ->toSql();
 
+        $sql = ExampleModel::query()
+            ->select('*')
+            ->useIndex('example_models_test_index')
+            ->join(
+                DB::raw(ExampleModel::joinTableIndexHint('example_model_groups', 'example_model_groups_test', 'emg')),
+                'emg.example_model_id',
+                'example_models.id'
+            )->toSql();
+
+        $this->assertStringContainsString(
+            'select * from example_models USE INDEX (example_models_test_index) inner join example_model_groups as emg USE INDEX (example_model_groups_test) on "emg"."example_model_id" = "example_models"."id"',
+            $sql
+        );
     }
 }

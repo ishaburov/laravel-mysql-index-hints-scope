@@ -4,7 +4,6 @@ namespace IndexHints;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\QueryException;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +15,7 @@ use Illuminate\Support\Str;
  * @method static Builder|Model forceIndex(array|string[] $indexes, string $for = '', string $as = '')
  * @method static Builder|Model useIndex(string|string[] $indexes, string $for = '', string $as = '')
  * @method static Builder|Model ignoreIndex(array|string[] $indexes, string $for = '', string $as = '')
+ * @method static string joinTableIndexHint(string $table, array|string[] $indexes, string $as = '', string $for = '')
  * @method static Builder|Model getTable()
  */
 trait Hintable
@@ -127,7 +127,7 @@ trait Hintable
 
             Schema::table(
                 self::getTable(),
-                fn(Blueprint $table) => $this->fillIndexes($table, $index, $type)
+                fn (Blueprint $table) => $this->fillIndexes($table, $index, $type)
             );
         }
 
@@ -160,5 +160,31 @@ trait Hintable
         $for = strtoupper(str_replace('_', ' ', $for));
         $this->preparedIndexes .= " FOR {$for}";
         return true;
+    }
+
+    public function scopeJoinTableIndexHint(
+        Builder $query,
+        string $table,
+        $indexes,
+        string $as = '',
+        string $for = '',
+        string $hintType = IndexHintsConstants::USE,
+    ): string {
+        $indexesArray = Arr::wrap($indexes);
+        $indexesString = implode(',', $indexesArray);
+
+        $hint = match (strtoupper($hintType)) {
+            IndexHintsConstants::FORCE => " FORCE INDEX",
+            IndexHintsConstants::IGNORE => " IGNORE INDEX",
+            default => " USE INDEX",
+        };
+
+        if (!empty($for)) {
+            $hint .= " FOR " . strtoupper(str_replace('_', ' ', $for));
+        }
+
+        $alias = !empty($as) ? "$table as {$as}" : $table;
+
+        return $alias . $hint . " (" . $indexesString . ")";
     }
 }

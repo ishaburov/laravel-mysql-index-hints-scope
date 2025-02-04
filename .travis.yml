@@ -3,7 +3,7 @@ language: php
 php:
   - 7.4
   - 8.0
-
+  - 8.2
 sudo: false
 
 install: travis_retry composer install --no-interaction --prefer-dist --no-suggest
