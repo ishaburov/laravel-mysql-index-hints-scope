@@ -1,0 +1,29 @@
+version: 2.1
+
+jobs:
+  test:
+    parameters:
+      php-version:
+        type: string
+        default: "7.4"
+    docker:
+      - image: cimg/php:<< parameters.php-version >>
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: composer install --no-interaction --prefer-dist --no-suggest
+      - run:
+          name: Run PHPUnit Tests
+          command: vendor/bin/phpunit --verbose
+
+workflows:
+  version: 2
+  test:
+    matrix:
+      parameters:
+        php-version: ["7.4", "8.0", "8.2"]
+      jobs:
+        - test:
+            php-version: << matrix.php-version >>
