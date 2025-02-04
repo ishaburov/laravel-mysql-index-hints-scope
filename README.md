@@ -2,7 +2,7 @@
 [![Latest Stable Version](https://poser.pugx.org/shaburov/laravel-mysql-index-hints-scope/v)](//packagist.org/packages/shaburov/laravel-mysql-index-hints-scope)
 [![Total Downloads](https://poser.pugx.org/shaburov/laravel-mysql-index-hints-scope/downloads)](//packagist.org/packages/shaburov/laravel-mysql-index-hints-scope)
 [![License](https://poser.pugx.org/shaburov/laravel-mysql-index-hints-scope/license)](//packagist.org/packages/shaburov/laravel-mysql-index-hints-scope)
-
+[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/GNf1EusXwDtJS6aiSSH1n1/Cz3Z35ZNHF1j3GqzkQ7w4q/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/GNf1EusXwDtJS6aiSSH1n1/Cz3Z35ZNHF1j3GqzkQ7w4q/tree/master)
 
 ### Simple library for mysql index hints and optimisations (USE INDEX, FORCE INDEX, IGNORE INDEX)
 
