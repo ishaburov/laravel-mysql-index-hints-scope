@@ -25,4 +25,4 @@ workflows:
       - test:
           matrix:
             parameters:
-              php-version: ["7.4", "8.0", "8.2"]
+              php-version: ["8.0", "8.2", "8.4"]
