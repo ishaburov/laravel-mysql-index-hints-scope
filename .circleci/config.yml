@@ -19,11 +19,10 @@ jobs:
           command: vendor/bin/phpunit --verbose
 
 workflows:
-  version: 2
+  version: 2.1
   test:
-    matrix:
-      parameters:
-        php-version: ["7.4", "8.0", "8.2"]
-      jobs:
-        - test:
-            php-version: << matrix.php-version >>
+    jobs:
+      - test:
+          matrix:
+            parameters:
+              php-version: ["7.4", "8.0", "8.2"]
